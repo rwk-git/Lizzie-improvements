@@ -160,7 +160,7 @@
                                              Such "unsealed" files cause codesign to fail. -->
                                         <exec executable="/bin/bash" failonerror="false">
                                             <arg value="-c"/>
-                                            <arg value="find '${app.dir}' -maxdepth 1 -mindepth 1 -not -name 'Contents' -delete"/>
+                                            <arg value="find '${app.dir}' -maxdepth 1 -mindepth 1 -not -name 'Contents' -exec rm -rf {} +"/>
                                         </exec>
 
                                         <!-- Ad-hoc sign the whole bundle so macOS accepts it
