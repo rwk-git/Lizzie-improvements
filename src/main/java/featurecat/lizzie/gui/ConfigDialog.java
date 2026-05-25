@@ -179,6 +179,7 @@ public class ConfigDialog extends LizzieDialog {
   public JCheckBox chkColorByWinrateInsteadOfVisits;
   public JCheckBox chkNotRefreshVariation;
   public JSlider sldBoardPositionProportion;
+  public JSlider sldStarProportion;
   public JTextField txtLimitBestMoveNum;
   public JTextField txtLimitBranchLength;
   public JCheckBox chkShowWinrateInSuggestion;
@@ -889,7 +890,7 @@ public class ConfigDialog extends LizzieDialog {
 
     JLabel lblMinPlayoutRatioForStats =
         new JLabel(resourceBundle.getString("LizzieConfig.title.minPlayoutRatioForStats"));
-    lblMinPlayoutRatioForStats.setBounds(6, 362, 157, 16);
+    lblMinPlayoutRatioForStats.setBounds(6, 392, 157, 16);
     uiTab.add(lblMinPlayoutRatioForStats);
     txtMinPlayoutRatioForStats =
         new JFormattedTextField(
@@ -901,7 +902,7 @@ public class ConfigDialog extends LizzieDialog {
               private DocumentFilter filter = new DigitOnlyFilter("[^0-9\\.]++");
             });
     txtMinPlayoutRatioForStats.setColumns(10);
-    txtMinPlayoutRatioForStats.setBounds(170, 357, 52, 24);
+    txtMinPlayoutRatioForStats.setBounds(170, 387, 52, 24);
     uiTab.add(txtMinPlayoutRatioForStats);
 
     JLabel lblShowCaptured =
@@ -1136,9 +1137,31 @@ public class ConfigDialog extends LizzieDialog {
     sldBoardPositionProportion.setBounds(170, 333, 200, 28);
     uiTab.add(sldBoardPositionProportion);
 
+    JLabel lblStarProportion =
+        new JLabel(resourceBundle.getString("LizzieConfig.title.starProportion"));
+    lblStarProportion.setBounds(6, 365, 163, 16);
+    uiTab.add(lblStarProportion);
+    sldStarProportion = new JSlider();
+    sldStarProportion.setPaintTicks(true);
+    sldStarProportion.setSnapToTicks(true);
+    sldStarProportion.setMinimum(1);
+    sldStarProportion.setMaximum(7);
+    sldStarProportion.setValue(Lizzie.config.starProportion);
+    sldStarProportion.addChangeListener(
+        new ChangeListener() {
+          public void stateChanged(ChangeEvent e) {
+            if (Lizzie.config.starProportion != sldStarProportion.getValue()) {
+              Lizzie.config.starProportion = sldStarProportion.getValue();
+              Lizzie.frame.repaint();
+            }
+          }
+        });
+    sldStarProportion.setBounds(170, 363, 200, 28);
+    uiTab.add(sldStarProportion);
+
     JLabel lblLimitBestMoveNum =
         new JLabel(resourceBundle.getString("LizzieConfig.title.limitBestMoveNum"));
-    lblLimitBestMoveNum.setBounds(6, 389, 157, 16);
+    lblLimitBestMoveNum.setBounds(6, 419, 157, 16);
     uiTab.add(lblLimitBestMoveNum);
     txtLimitBestMoveNum =
         new JFormattedTextField(
@@ -1149,13 +1172,13 @@ public class ConfigDialog extends LizzieDialog {
 
               private DocumentFilter filter = new DigitOnlyFilter();
             });
-    txtLimitBestMoveNum.setBounds(170, 385, 52, 24);
+    txtLimitBestMoveNum.setBounds(170, 415, 52, 24);
     uiTab.add(txtLimitBestMoveNum);
     txtLimitBestMoveNum.setColumns(10);
 
     JLabel lblLimitBranchLength =
         new JLabel(resourceBundle.getString("LizzieConfig.title.limitBranchLength"));
-    lblLimitBranchLength.setBounds(372, 389, 157, 16);
+    lblLimitBranchLength.setBounds(372, 419, 157, 16);
     uiTab.add(lblLimitBranchLength);
     txtLimitBranchLength =
         new JFormattedTextField(
@@ -1166,33 +1189,33 @@ public class ConfigDialog extends LizzieDialog {
 
               private DocumentFilter filter = new DigitOnlyFilter();
             });
-    txtLimitBranchLength.setBounds(537, 385, 52, 24);
+    txtLimitBranchLength.setBounds(537, 415, 52, 24);
     uiTab.add(txtLimitBranchLength);
     txtLimitBranchLength.setColumns(10);
 
     JLabel lblSuggestionMoveInfo =
         new JLabel(resourceBundle.getString("LizzieConfig.title.suggestionMoveInfo"));
-    lblSuggestionMoveInfo.setBounds(6, 416, 163, 16);
+    lblSuggestionMoveInfo.setBounds(6, 446, 163, 16);
     uiTab.add(lblSuggestionMoveInfo);
     chkShowWinrateInSuggestion =
         new JCheckBox(resourceBundle.getString("LizzieConfig.title.showWinrateInSuggestion"));
-    chkShowWinrateInSuggestion.setBounds(170, 416, 100, 23);
+    chkShowWinrateInSuggestion.setBounds(170, 446, 100, 23);
     uiTab.add(chkShowWinrateInSuggestion);
     chkShowPlayoutsInSuggestion =
         new JCheckBox(resourceBundle.getString("LizzieConfig.title.showPlayoutsInSuggestion"));
-    chkShowPlayoutsInSuggestion.setBounds(270, 416, 100, 23);
+    chkShowPlayoutsInSuggestion.setBounds(270, 446, 100, 23);
     uiTab.add(chkShowPlayoutsInSuggestion);
     chkShowScoremeanInSuggestion =
         new JCheckBox(resourceBundle.getString("LizzieConfig.title.showScoremeanInSuggestion"));
-    chkShowScoremeanInSuggestion.setBounds(370, 416, 100, 23);
+    chkShowScoremeanInSuggestion.setBounds(370, 446, 100, 23);
     uiTab.add(chkShowScoremeanInSuggestion);
 
     JLabel lblGtpConsoleStyle =
         new JLabel(resourceBundle.getString("LizzieConfig.title.gtpConsoleStyle"));
-    lblGtpConsoleStyle.setBounds(6, 446, 157, 16);
+    lblGtpConsoleStyle.setBounds(6, 476, 157, 16);
     uiTab.add(lblGtpConsoleStyle);
     tpGtpConsoleStyle = new JTextPane();
-    tpGtpConsoleStyle.setBounds(170, 446, 460, 80);
+    tpGtpConsoleStyle.setBounds(170, 476, 460, 80);
     uiTab.add(tpGtpConsoleStyle);
 
     setBoardSize();
@@ -2633,6 +2656,8 @@ public class ConfigDialog extends LizzieDialog {
       Lizzie.config.boardPositionProportion = sldBoardPositionProportion.getValue();
       Lizzie.config.uiConfig.putOpt(
           "board-position-proportion", Lizzie.config.boardPositionProportion);
+      Lizzie.config.starProportion = sldStarProportion.getValue();
+      Lizzie.config.uiConfig.putOpt("star-proportion", Lizzie.config.starProportion);
       Lizzie.config.limitBestMoveNum = txtFieldIntValue(txtLimitBestMoveNum);
       Lizzie.config.uiConfig.put("limit-best-move-num", Lizzie.config.limitBestMoveNum);
       Lizzie.config.limitBranchLength = txtFieldIntValue(txtLimitBranchLength);

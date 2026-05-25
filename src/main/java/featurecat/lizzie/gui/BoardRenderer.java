@@ -487,7 +487,9 @@ public class BoardRenderer {
   private void drawStarPoints0(
       int nStarpoints, int edgeOffset, int gridDistance, boolean center, Graphics2D g) {
     g.setRenderingHint(KEY_ANTIALIASING, VALUE_ANTIALIAS_ON);
-    int starPointRadius = (int) (STARPOINT_DIAMETER * min(boardWidth, boardHeight)) / 2;
+    int starPointRadius =
+        (int) (STARPOINT_DIAMETER * min(boardWidth, boardHeight))
+            / Math.max(1, Lizzie.config.starProportion);
     for (int i = 0; i < nStarpoints; i++) {
       for (int j = 0; j < nStarpoints; j++) {
         int centerX = x + scaledMarginWidth + squareWidth * (edgeOffset + gridDistance * i);

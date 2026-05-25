@@ -109,6 +109,7 @@ public class Config {
   public boolean holdBestMovesToSgf = true;
   public boolean showBestMovesByHold = true;
   public int boardPositionProportion = 4;
+  public int starProportion = 2;
   public int limitBestMoveNum = 0;
   public int limitBranchLength = 0;
   public String gtpConsoleStyle = "";
@@ -267,6 +268,7 @@ public class Config {
     replayBranchIntervalSeconds = uiConfig.optDouble("replay-branch-interval-seconds", 1.0);
     colorByWinrateInsteadOfVisits = uiConfig.optBoolean("color-by-winrate-instead-of-visits");
     boardPositionProportion = uiConfig.optInt("board-position-proportion", 4);
+    starProportion = uiConfig.optInt("star-proportion", 2);
     limitBestMoveNum = uiConfig.optInt("limit-best-move-num", 0);
     limitBranchLength = uiConfig.optInt("limit-branch-length", 0);
     minPlayoutRatioForStats = uiConfig.optDouble("min-playout-ratio-for-stats", 0.1);
