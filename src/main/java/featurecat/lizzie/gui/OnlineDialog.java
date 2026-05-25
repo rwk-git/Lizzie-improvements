@@ -12,6 +12,7 @@ import featurecat.lizzie.util.EncodingDetector;
 import featurecat.lizzie.util.Utils;
 import io.socket.client.Ack;
 import io.socket.client.IO;
+import io.socket.client.Manager;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
 import java.awt.BorderLayout;
@@ -1811,7 +1812,7 @@ public class OnlineDialog extends LizzieDialog {
               }
             })
         .on(
-            Socket.EVENT_MESSAGE,
+            "message",
             new Emitter.Listener() {
               @Override
               public void call(Object... args) {
@@ -1827,7 +1828,7 @@ public class OnlineDialog extends LizzieDialog {
               }
             })
         .on(
-            Socket.EVENT_ERROR,
+            "error",
             new Emitter.Listener() {
               @Override
               public void call(Object... args) {
@@ -1835,7 +1836,7 @@ public class OnlineDialog extends LizzieDialog {
               }
             })
         .on(
-            Socket.EVENT_PING,
+            "ping",
             new Emitter.Listener() {
               @Override
               public void call(Object... args) {
@@ -1843,7 +1844,7 @@ public class OnlineDialog extends LizzieDialog {
               }
             })
         .on(
-            Socket.EVENT_PONG,
+            "pong",
             new Emitter.Listener() {
               @Override
               public void call(Object... args) {
@@ -1859,7 +1860,7 @@ public class OnlineDialog extends LizzieDialog {
               }
             })
         .on(
-            Socket.EVENT_CONNECT_TIMEOUT,
+            "connect_timeout",
             new Emitter.Listener() {
               @Override
               public void call(Object... args) {
@@ -1867,7 +1868,7 @@ public class OnlineDialog extends LizzieDialog {
               }
             })
         .on(
-            Socket.EVENT_CONNECTING,
+            "connecting",
             new Emitter.Listener() {
               @Override
               public void call(Object... args) {
@@ -1875,7 +1876,7 @@ public class OnlineDialog extends LizzieDialog {
               }
             })
         .on(
-            Socket.EVENT_RECONNECT,
+            Manager.EVENT_RECONNECT,
             new Emitter.Listener() {
               @Override
               public void call(Object... args) {
@@ -1883,7 +1884,7 @@ public class OnlineDialog extends LizzieDialog {
               }
             })
         .on(
-            Socket.EVENT_RECONNECT_ATTEMPT,
+            "reconnect_attempt",
             new Emitter.Listener() {
               @Override
               public void call(Object... args) {
@@ -1891,7 +1892,7 @@ public class OnlineDialog extends LizzieDialog {
               }
             })
         .on(
-            Socket.EVENT_RECONNECT_FAILED,
+            "reconnect_failed",
             new Emitter.Listener() {
               @Override
               public void call(Object... args) {
@@ -1899,7 +1900,7 @@ public class OnlineDialog extends LizzieDialog {
               }
             })
         .on(
-            Socket.EVENT_RECONNECT_ERROR,
+            "reconnect_error",
             new Emitter.Listener() {
               @Override
               public void call(Object... args) {
@@ -1907,7 +1908,7 @@ public class OnlineDialog extends LizzieDialog {
               }
             })
         .on(
-            Socket.EVENT_RECONNECTING,
+            "reconnecting",
             new Emitter.Listener() {
               @Override
               public void call(Object... args) {
