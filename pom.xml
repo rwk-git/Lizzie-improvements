@@ -107,64 +107,82 @@
                     </dependency>
                 </dependencies>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <id>build-native-launcher-and-sign</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target>
-                                <property name="app.dir"
-                                          value="${project.build.directory}/${project.artifactId}-${project.version}/${project.artifactId}.app"/>
-
-                                <!-- Compile a universal (arm64 + x86_64) native launcher binary
-                                     to replace the x86_64-only binary from appbundle-maven-plugin.
-                                     Requires Xcode Command Line Tools (clang). -->
-                                <exec executable="clang" failonerror="true">
-                                    <arg value="-arch"/>    <arg value="arm64"/>
-                                    <arg value="-arch"/>    <arg value="x86_64"/>
-                                    <arg value="-o"/>
-                                    <arg value="${app.dir}/Contents/MacOS/JavaAppLauncher"/>
-                                    <arg value="${project.basedir}/src/macos/launcher.c"/>
-                                </exec>
-
-                                <!-- PkgInfo is required by macOS Launch Services but is not
-                                     created by appbundle-maven-plugin 1.2.0. -->
-                                <echo file="${app.dir}/Contents/PkgInfo"
-                                      message="APPL????"/>
-
-                                <!-- Remove any files at the .app root that aren't Contents/
-                                     (e.g. config.txt / persist left by a previous run of the app).
-                                     Such "unsealed" files cause codesign to fail. -->
-                                <exec executable="/bin/bash" failonerror="false">
-                                    <arg value="-c"/>
-                                    <arg value="find '${app.dir}' -maxdepth 1 -mindepth 1 -not -name 'Contents' -delete"/>
-                                </exec>
-
-                                <!-- Ad-hoc sign the whole bundle so macOS (Gatekeeper / spctl)
-                                     accepts it without a paid Apple Developer certificate.
-                                     On first launch macOS may still prompt in
-                                     System Settings → Privacy & Security → allow anyway. -->
-                                <exec executable="codesign" failonerror="true">
-                                    <arg value="--force"/>
-                                    <arg value="--deep"/>
-                                    <arg value="--sign"/>
-                                    <arg value="-"/>
-                                    <arg value="${app.dir}"/>
-                                </exec>
-                            </target>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <!-- Automatically active on macOS: compiles a universal (arm64 + x86_64) native
+             launcher binary, adds the missing PkgInfo, and ad-hoc signs the .app bundle.
+             On Windows and Linux this profile is never activated, so the build is unaffected. -->
+        <profile>
+            <id>macos-bundle</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                </os>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <executions>
+                            <execution>
+                                <id>build-native-launcher-and-sign</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <property name="app.dir"
+                                                  value="${project.build.directory}/${project.artifactId}-${project.version}/${project.artifactId}.app"/>
+
+                                        <!-- Compile a universal (arm64 + x86_64) native launcher
+                                             to replace the x86_64-only binary from appbundle-maven-plugin.
+                                             Requires Xcode Command Line Tools (clang). -->
+                                        <exec executable="clang" failonerror="true">
+                                            <arg value="-arch"/>    <arg value="arm64"/>
+                                            <arg value="-arch"/>    <arg value="x86_64"/>
+                                            <arg value="-o"/>
+                                            <arg value="${app.dir}/Contents/MacOS/JavaAppLauncher"/>
+                                            <arg value="${project.basedir}/src/macos/launcher.c"/>
+                                        </exec>
+
+                                        <!-- PkgInfo is required by macOS Launch Services but is
+                                             not created by appbundle-maven-plugin 1.2.0. -->
+                                        <echo file="${app.dir}/Contents/PkgInfo"
+                                              message="APPL????"/>
+
+                                        <!-- Remove any files at the .app root that aren't Contents/
+                                             (e.g. config.txt / persist left by a previous run).
+                                             Such "unsealed" files cause codesign to fail. -->
+                                        <exec executable="/bin/bash" failonerror="false">
+                                            <arg value="-c"/>
+                                            <arg value="find '${app.dir}' -maxdepth 1 -mindepth 1 -not -name 'Contents' -delete"/>
+                                        </exec>
+
+                                        <!-- Ad-hoc sign the whole bundle so macOS accepts it
+                                             without a paid Apple Developer certificate.
+                                             On first launch macOS may still prompt in
+                                             System Settings → Privacy & Security → allow anyway. -->
+                                        <exec executable="codesign" failonerror="true">
+                                            <arg value="--force"/>
+                                            <arg value="--deep"/>
+                                            <arg value="--sign"/>
+                                            <arg value="-"/>
+                                            <arg value="${app.dir}"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.json/json -->
