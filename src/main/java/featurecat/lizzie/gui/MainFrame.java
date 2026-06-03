@@ -395,6 +395,19 @@ public abstract class MainFrame extends JFrame {
     gameInfoDialog.dispose();
   }
 
+  public void confirmAndClearBoard() {
+    int ret =
+        JOptionPane.showConfirmDialog(
+            this,
+            resourceBundle.getString("Menu.game.clearBoard.confirmMessage"),
+            resourceBundle.getString("Menu.game.clearBoard"),
+            JOptionPane.OK_CANCEL_OPTION);
+    if (ret == JOptionPane.OK_OPTION) {
+      Lizzie.board.clear();
+      refresh(0);
+    }
+  }
+
   public void saveFile() {
     FileNameExtensionFilter filter =
         new FileNameExtensionFilter("Smart Game Format (*.sgf *.SGF)", "sgf");

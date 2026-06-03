@@ -125,8 +125,7 @@ public class ToolBar extends JToolBar {
     clearBoard.addActionListener(
         new ActionListener() {
           public void actionPerformed(ActionEvent e) {
-            Lizzie.board.clear();
-            Lizzie.frame.refresh(2);
+            Lizzie.frame.confirmAndClearBoard();
           }
         });
     add(clearBoard);

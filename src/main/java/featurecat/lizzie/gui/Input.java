@@ -372,7 +372,7 @@ public class Input implements MouseListener, KeyListener, MouseWheelListener, Mo
 
       case VK_HOME:
         if (controlIsPressed(e)) {
-          Lizzie.board.clear();
+          Lizzie.frame.confirmAndClearBoard();
         } else {
           while (Lizzie.board.previousMove()) ;
         }

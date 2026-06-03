@@ -1263,8 +1263,7 @@ public class Menu extends JMenuBar {
         new ActionListener() {
           @Override
           public void actionPerformed(ActionEvent e) {
-            Lizzie.board.clear();
-            Lizzie.frame.refresh(0);
+            Lizzie.frame.confirmAndClearBoard();
           }
         });
     gameMenu.add(clearBoard);
