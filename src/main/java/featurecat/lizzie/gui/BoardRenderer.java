@@ -168,7 +168,9 @@ public class BoardRenderer {
       //        timer.lap("movenumbers");
       List<TextData> textDatas = new ArrayList<>();
       if (Lizzie.frame.isShowingPolicy) drawPolicy(g);
-      else if (!Lizzie.frame.isPlayingAgainstLeelaz && Lizzie.config.showBestMovesNow()) {
+      else if (!Lizzie.frame.isPlayingAgainstLeelaz
+          && Lizzie.config.showBestMovesNow()
+          && Lizzie.config.showAiSuggestions) {
         drawLeelazSuggestionsBackgroundShadow(g, textDatas);
         drawLeelazSuggestionsBackgroundCircle(g, textDatas);
       }
@@ -179,7 +181,8 @@ public class BoardRenderer {
 
       if (!Lizzie.frame.isShowingPolicy
           && !Lizzie.frame.isPlayingAgainstLeelaz
-          && Lizzie.config.showBestMovesNow()) drawLeelazSuggestionsForeground(g, textDatas);
+          && Lizzie.config.showBestMovesNow()
+          && Lizzie.config.showAiSuggestions) drawLeelazSuggestionsForeground(g, textDatas);
 
       drawStoneMarkup(g);
     }
@@ -634,7 +637,10 @@ public class BoardRenderer {
 
     variationOpt = Optional.empty();
 
-    if (isMainBoard && (isShowingRawBoard() || !Lizzie.config.showBranchNow())) {
+    if (isMainBoard
+        && (isShowingRawBoard()
+            || !Lizzie.config.showBranchNow()
+            || !Lizzie.config.showAiSuggestions)) {
       return;
     }
 

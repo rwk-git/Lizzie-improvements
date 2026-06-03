@@ -63,6 +63,7 @@ public class Config {
   public boolean showStatus = true;
   public boolean showBranch = true;
   public boolean showBestMoves = true;
+  public boolean showAiSuggestions = true;
   public boolean showNextMoves = true;
   public boolean showSubBoard = true;
   public boolean largeSubBoard = false;
@@ -399,6 +400,10 @@ public class Config {
 
   public void toggleShowBestMoves() {
     this.showBestMoves = !this.showBestMoves;
+  }
+
+  public void toggleShowAiSuggestions() {
+    this.showAiSuggestions = !this.showAiSuggestions;
   }
 
   public void toggleShowNextMoves() {

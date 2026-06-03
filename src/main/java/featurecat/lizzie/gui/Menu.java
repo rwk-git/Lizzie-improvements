@@ -307,6 +307,19 @@ public class Menu extends JMenuBar {
     final JMenu Suggestions = new JMenu(resourceBundle.getString("Menu.view.Suggestions"));
     viewMenu.add(Suggestions);
 
+    final JCheckBoxMenuItem showAiSuggestions =
+        new JCheckBoxMenuItem(resourceBundle.getString("Menu.view.Suggestions.ShowSuggestions"));
+    showAiSuggestions.setSelected(Lizzie.config.showAiSuggestions);
+    showAiSuggestions.addActionListener(
+        new ActionListener() {
+          @Override
+          public void actionPerformed(ActionEvent e) {
+            Lizzie.config.toggleShowAiSuggestions();
+          }
+        });
+    Suggestions.add(showAiSuggestions);
+    Suggestions.addSeparator();
+
     final JCheckBoxMenuItem suggestion1 =
         new JCheckBoxMenuItem(resourceBundle.getString("Menu.view.Suggestions.Suggestion1"));
     suggestion1.addActionListener(

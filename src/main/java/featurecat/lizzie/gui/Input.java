@@ -483,6 +483,8 @@ public class Input implements MouseListener, KeyListener, MouseWheelListener, Mo
           Lizzie.board.clearAnalysis();
         } else if (e.isAltDown()) {
           Lizzie.frame.openAvoidMoveDialog();
+        } else if (e.isShiftDown()) {
+          Lizzie.config.toggleShowAiSuggestions();
         } else {
           shouldDisableAnalysis = false;
           Lizzie.board.toggleAnalysis();
