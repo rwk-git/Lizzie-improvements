@@ -89,6 +89,7 @@ public class LizzieFrame extends MainFrame {
   };
   private static BoardRenderer boardRenderer;
   private static BoardRenderer subBoardRenderer;
+  private static BoardRenderer secondSubBoardRenderer;
   private static VariationTree variationTree;
   private static WinrateGraph winrateGraph;
   private static Menu menu;
@@ -120,6 +121,7 @@ public class LizzieFrame extends MainFrame {
 
     boardRenderer = new BoardRenderer(true);
     subBoardRenderer = new BoardRenderer(false);
+    secondSubBoardRenderer = new BoardRenderer(false);
     variationTree = new VariationTree();
     winrateGraph = new WinrateGraph();
     countResults = new CountResults();
@@ -567,6 +569,16 @@ public class LizzieFrame extends MainFrame {
         }
       }
 
+      // second subboard: bottom of the right panel
+      int secondSubBoardLength = 0, secondSubBoardX = vx, secondSubBoardY = vy;
+      if (Lizzie.config.showSecondSubBoard && vw > 0 && vh > 0) {
+        int maxH = Math.min(vw, vh / 2);
+        secondSubBoardLength = Math.min(vw, maxH);
+        secondSubBoardX = vx + (vw - secondSubBoardLength) / 2;
+        secondSubBoardY = vy + vh - secondSubBoardLength;
+        vh = Math.max(0, vh - secondSubBoardLength);
+      }
+
       // variation tree
       int treex = vx;
       int treey = vy;
@@ -663,6 +675,17 @@ public class LizzieFrame extends MainFrame {
             // This can happen when no space is left for subboard.
           }
         }
+
+        if (Lizzie.config.showSecondSubBoard && secondSubBoardLength > 0) {
+          try {
+            secondSubBoardRenderer.setLocation(secondSubBoardX, secondSubBoardY);
+            secondSubBoardRenderer.setBoardLength(secondSubBoardLength, secondSubBoardLength);
+            secondSubBoardRenderer.setupSizeParameters();
+            secondSubBoardRenderer.draw(g);
+          } catch (Exception e) {
+            // This can happen when no space is left for second subboard.
+          }
+        }
       } else if (Lizzie.config.showStatus) {
         drawPonderingState(g, loadingText(), loadingX, loadingY, loadingSize);
       }
@@ -698,6 +721,7 @@ public class LizzieFrame extends MainFrame {
   public void resetImages() {
     boardRenderer.resetImages();
     subBoardRenderer.resetImages();
+    secondSubBoardRenderer.resetImages();
   }
 
   private Graphics2D createBackground(int width, int hight) {
@@ -1493,6 +1517,9 @@ public class LizzieFrame extends MainFrame {
 
   protected void drawEstimateRectKataInEDT(ArrayList<Double> estimateArray) {
     Utils.mustBeEventDispatchThread();
+    if (Lizzie.config.showSecondSubBoard) {
+      secondSubBoardRenderer.drawEstimateRect(estimateArray, false, true);
+    }
     if (!Lizzie.config.showKataGoEstimate) {
       return;
     }
@@ -1613,6 +1640,7 @@ public class LizzieFrame extends MainFrame {
   public void clearBeforeMove() {
     // TODO Auto-generated method stub
     subBoardRenderer.clearBeforeMove();
+    secondSubBoardRenderer.clearBeforeMove();
     if (Lizzie.frame.isEstimating) {
       Lizzie.frame.noEstimateByZen(false);
     }

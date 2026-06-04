@@ -1869,12 +1869,16 @@ public class BoardRenderer {
   // isZen: estimates are for black (Zen) rather than player to move (KataGo)
   // and estimates are just <0/=0/>0 (Zen) rather than -1..+1 (KataGo)
   public void drawEstimateRect(ArrayList<Double> estimateArray, boolean isZen) {
+    drawEstimateRect(estimateArray, isZen, false);
+  }
+
+  public void drawEstimateRect(ArrayList<Double> estimateArray, boolean isZen, boolean force) {
     if (boardWidth <= 0 || boardHeight <= 0) {
       return;
     }
     boolean drawLarge = false, drawSmall = false, drawSize = false;
     int drawSmart = 0;
-    if (Lizzie.config.showKataGoEstimate || isZen) {
+    if (force || Lizzie.config.showKataGoEstimate || isZen) {
       switch (Lizzie.config.kataGoEstimateMode) {
         case "small":
           drawSmall = true;

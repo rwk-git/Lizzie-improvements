@@ -22,6 +22,7 @@ public class LizzieLayout extends BorderLayout implements LayoutManager2, java.i
   private Component south;
   private Component mainBoard;
   private Component subBoard;
+  private Component secondSubBoard;
   private Component winratePane;
   private Component variationPane;
   private Component basicInfoPane;
@@ -34,6 +35,7 @@ public class LizzieLayout extends BorderLayout implements LayoutManager2, java.i
   public static final String WEST = "West";
   public static final String MAIN_BOARD = "mainBoard";
   public static final String SUB_BOARD = "subBoard";
+  public static final String SECOND_SUB_BOARD = "secondSubBoard";
   public static final String WINRATE = "winratePane";
   public static final String VARIATION = "variationPane";
   public static final String BASIC_INFO = "basicInfoPane";
@@ -110,6 +112,8 @@ public class LizzieLayout extends BorderLayout implements LayoutManager2, java.i
         winratePane = comp;
       } else if (SUB_BOARD.equals(name)) {
         subBoard = comp;
+      } else if (SECOND_SUB_BOARD.equals(name)) {
+        secondSubBoard = comp;
       } else if (COMMENT.equals(name)) {
         commentPane = comp;
       } else if (CONSOLE.equals(name)) {
@@ -140,6 +144,8 @@ public class LizzieLayout extends BorderLayout implements LayoutManager2, java.i
         winratePane = null;
       } else if (comp == subBoard) {
         subBoard = null;
+      } else if (comp == secondSubBoard) {
+        secondSubBoard = null;
       }
       if (comp == commentPane) {
         commentPane = null;
@@ -648,6 +654,19 @@ public class LizzieLayout extends BorderLayout implements LayoutManager2, java.i
         }
       }
 
+      // second subboard: at the bottom of the right panel (the vx/vw/bottom area)
+      int[] secondSubBoardParam = new int[] {0, 0, 0, 0};
+      int secondSubBoardX = 0, secondSubBoardY = 0;
+      boolean showSecondSub =
+          Lizzie.config.showSecondSubBoard && getChild(SECOND_SUB_BOARD, ltr) != null && vw > 0;
+      if (showSecondSub) {
+        int maxH = Math.min(vw, vh / 2);
+        secondSubBoardParam = BoardRenderer.availableLength(vw, maxH, false, false);
+        secondSubBoardX = vx + (vw - secondSubBoardParam[0]) / 2;
+        secondSubBoardY = bottom - secondSubBoardParam[3];
+        vh = Math.max(0, vh - secondSubBoardParam[3]);
+      }
+
       // variation tree
       int treex = vx;
       int treey = vy;
@@ -706,6 +725,18 @@ public class LizzieLayout extends BorderLayout implements LayoutManager2, java.i
         c.setBounds(cx, cy, cw, ch);
         c.repaint();
       }
+      if ((c = getChild(SECOND_SUB_BOARD, ltr)) != null) {
+        if (showSecondSub) {
+          c.setBounds(
+              secondSubBoardX, secondSubBoardY, secondSubBoardParam[0], secondSubBoardParam[3]);
+          if (c instanceof LizziePane) {
+            ((LizziePane) c).boardParams = secondSubBoardParam;
+          }
+          c.repaint();
+        } else {
+          c.setBounds(0, 0, 0, 0);
+        }
+      }
     }
   }
 
@@ -724,6 +755,8 @@ public class LizzieLayout extends BorderLayout implements LayoutManager2, java.i
       result = mainBoard;
     } else if (key == SUB_BOARD) {
       result = subBoard;
+    } else if (key == SECOND_SUB_BOARD) {
+      result = secondSubBoard;
     } else if (key == VARIATION) {
       result = variationPane;
     } else if (key == WINRATE) {

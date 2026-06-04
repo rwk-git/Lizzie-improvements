@@ -50,6 +50,7 @@ public class LizzieMain extends MainFrame {
   public static BasicInfoPane basicInfoPane;
   public static BoardPane boardPane;
   public static SubBoardPane subBoardPane;
+  public static SecondSubBoardPane secondSubBoardPane;
   public static WinratePane winratePane;
   public static VariationTreePane variationTreePane;
   public static CommentPane commentPane;
@@ -208,6 +209,8 @@ public class LizzieMain extends MainFrame {
     getContentPane().add(basicInfoPane, LizzieLayout.BASIC_INFO);
     getContentPane().add(winratePane, LizzieLayout.WINRATE);
     getContentPane().add(subBoardPane, LizzieLayout.SUB_BOARD);
+    secondSubBoardPane = new SecondSubBoardPane(this);
+    getContentPane().add(secondSubBoardPane, LizzieLayout.SECOND_SUB_BOARD);
     getContentPane().add(variationTreePane, LizzieLayout.VARIATION);
     getContentPane().add(commentPane, LizzieLayout.COMMENT);
     WindowPosition.restorePane(Lizzie.config.persistedUi, boardPane);
@@ -352,6 +355,7 @@ public class LizzieMain extends MainFrame {
     cachedWallpaperImage = emptyImage;
     boardPane.resetImages();
     subBoardPane.resetImages();
+    secondSubBoardPane.resetImages();
   }
 
   public BufferedImage getWallpaper() {
@@ -605,6 +609,7 @@ public class LizzieMain extends MainFrame {
       }
     }
     subBoardPane.repaint();
+    secondSubBoardPane.repaint();
     winratePane.repaint();
   }
 
@@ -726,6 +731,9 @@ public class LizzieMain extends MainFrame {
 
   protected void drawEstimateRectKataInEDT(ArrayList<Double> estimateArray) {
     Utils.mustBeEventDispatchThread();
+    if (Lizzie.config.showSecondSubBoard) {
+      secondSubBoardPane.drawEstimateRect(estimateArray, false);
+    }
     if (!Lizzie.config.showKataGoEstimate) {
       return;
     }
@@ -859,6 +867,7 @@ public class LizzieMain extends MainFrame {
   public void clearBeforeMove() {
     // TODO Auto-generated method stub
     subBoardPane.clearBeforeMove();
+    secondSubBoardPane.clearBeforeMove();
     Lizzie.frame.isMouseOver = false;
     if (Lizzie.frame.isEstimating) {
       Lizzie.frame.noEstimateByZen(false);

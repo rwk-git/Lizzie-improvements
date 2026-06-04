@@ -66,6 +66,7 @@ public class Config {
   public boolean showAiSuggestions = true;
   public boolean showNextMoves = true;
   public boolean showSubBoard = true;
+  public boolean showSecondSubBoard = true;
   public boolean largeSubBoard = false;
   public boolean startMaximized = true;
   public boolean showWinrateInSuggestion = true;
@@ -404,6 +405,10 @@ public class Config {
 
   public void toggleShowAiSuggestions() {
     this.showAiSuggestions = !this.showAiSuggestions;
+  }
+
+  public void toggleShowSecondSubBoard() {
+    this.showSecondSubBoard = !this.showSecondSubBoard;
   }
 
   public void toggleShowNextMoves() {

@@ -388,6 +388,22 @@ public class Menu extends JMenuBar {
         });
     panelView.add(subBoard);
 
+    final JCheckBoxMenuItem secondSubBoard =
+        new JCheckBoxMenuItem(resourceBundle.getString("Menu.view.panelView.secondSubBoard"));
+    secondSubBoard.setSelected(Lizzie.config.showSecondSubBoard);
+    secondSubBoard.addActionListener(
+        new ActionListener() {
+          @Override
+          public void actionPerformed(ActionEvent e) {
+            Lizzie.config.toggleShowSecondSubBoard();
+            Lizzie.frame.removeEstimateRect();
+            if (Lizzie.leelaz != null) Lizzie.leelaz.ponder();
+            Lizzie.frame.refreshBackground();
+            Lizzie.frame.refresh(2);
+          }
+        });
+    panelView.add(secondSubBoard);
+
     final JCheckBoxMenuItem winrateGraph =
         new JCheckBoxMenuItem(resourceBundle.getString("Menu.view.panelView.winrateGraph"));
     winrateGraph.addActionListener(
