@@ -569,14 +569,25 @@ public class LizzieFrame extends MainFrame {
         }
       }
 
-      // second subboard: bottom of the right panel
+      // second subboard
       int secondSubBoardLength = 0, secondSubBoardX = vx, secondSubBoardY = vy;
       if (Lizzie.config.showSecondSubBoard && vw > 0 && vh > 0) {
-        int maxH = Math.min(vw, vh / 2);
-        secondSubBoardLength = Math.min(vw, maxH);
-        secondSubBoardX = vx + (vw - secondSubBoardLength) / 2;
-        secondSubBoardY = vy + vh - secondSubBoardLength;
-        vh = Math.max(0, vh - secondSubBoardLength);
+        if (width >= height
+            && !Lizzie.config.showLargeSubBoard()
+            && !Lizzie.config.showLargeWinrate()) {
+          // Default landscape: mirror the first subboard — same size, aligned at its top Y
+          secondSubBoardLength = subBoardLength;
+          secondSubBoardX = vx + (vw - secondSubBoardLength) / 2;
+          secondSubBoardY = subBoardY;
+          vh = Math.max(0, Math.min(vh, subBoardY - vy));
+        } else {
+          // Other modes: place at bottom of the right panel
+          int maxH = Math.min(vw, vh / 2);
+          secondSubBoardLength = Math.min(vw, maxH);
+          secondSubBoardX = vx + (vw - secondSubBoardLength) / 2;
+          secondSubBoardY = vy + vh - secondSubBoardLength;
+          vh = Math.max(0, vh - secondSubBoardLength);
+        }
       }
 
       // variation tree
