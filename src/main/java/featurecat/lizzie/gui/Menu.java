@@ -102,6 +102,9 @@ public class Menu extends JMenuBar {
 
     final JCheckBoxMenuItem autoSave =
         new JCheckBoxMenuItem(resourceBundle.getString("Menu.file.autoSave"));
+    final JCheckBoxMenuItem autoSaveEveryMove =
+        new JCheckBoxMenuItem(resourceBundle.getString("Menu.file.autoSaveEveryMove"));
+
     autoSave.addActionListener(
         new ActionListener() {
           @Override
@@ -109,23 +112,40 @@ public class Menu extends JMenuBar {
             if (Lizzie.config.uiConfig.optInt("autosave-interval-seconds", -1) > 0) {
               Lizzie.config.uiConfig.put("autosave-interval-seconds", -1);
               Lizzie.config.uiConfig.put("resume-previous-game", false);
-              try {
-                Lizzie.config.save();
-              } catch (IOException es) {
-                // TODO Auto-generated catch block
-              }
             } else {
               Lizzie.config.uiConfig.put("autosave-interval-seconds", 10);
+              Lizzie.config.uiConfig.put("autosave-every-move", false);
               Lizzie.config.uiConfig.put("resume-previous-game", true);
-              try {
-                Lizzie.config.save();
-              } catch (IOException es) {
-                // TODO Auto-generated catch block
-              }
+              autoSaveEveryMove.setState(false);
+            }
+            try {
+              Lizzie.config.save();
+            } catch (IOException es) {
             }
           }
         });
     fileMenu.add(autoSave);
+
+    autoSaveEveryMove.addActionListener(
+        new ActionListener() {
+          @Override
+          public void actionPerformed(ActionEvent e) {
+            if (Lizzie.config.uiConfig.optBoolean("autosave-every-move", false)) {
+              Lizzie.config.uiConfig.put("autosave-every-move", false);
+              Lizzie.config.uiConfig.put("resume-previous-game", false);
+            } else {
+              Lizzie.config.uiConfig.put("autosave-every-move", true);
+              Lizzie.config.uiConfig.put("autosave-interval-seconds", -1);
+              Lizzie.config.uiConfig.put("resume-previous-game", true);
+              autoSave.setState(false);
+            }
+            try {
+              Lizzie.config.save();
+            } catch (IOException es) {
+            }
+          }
+        });
+    fileMenu.add(autoSaveEveryMove);
 
     final JMenuItem resume = new JMenuItem(resourceBundle.getString("Menu.file.resume"));
     fileMenu.add(resume);
@@ -163,9 +183,9 @@ public class Menu extends JMenuBar {
     fileMenu.addMenuListener(
         new MenuListener() {
           public void menuSelected(MenuEvent e) {
-            if (Lizzie.config.uiConfig.optInt("autosave-interval-seconds", -1) > 0)
-              autoSave.setState(true);
-            else autoSave.setState(false);
+            autoSave.setState(Lizzie.config.uiConfig.optInt("autosave-interval-seconds", -1) > 0);
+            autoSaveEveryMove.setState(
+                Lizzie.config.uiConfig.optBoolean("autosave-every-move", false));
           }
 
           @Override

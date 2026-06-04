@@ -459,6 +459,7 @@ public class Board implements LeelazListener {
       // update history with pass
       history.addOrGoto(newState, newBranch, changeMove);
 
+      if (Lizzie.config.uiConfig.optBoolean("autosave-every-move", false)) autosave();
       Lizzie.frame.refresh();
     }
   }
@@ -609,6 +610,7 @@ public class Board implements LeelazListener {
       history.addOrGoto(newState, newBranch, changeMove);
       Lizzie.leelaz.endModifyingBoard();
 
+      if (Lizzie.config.uiConfig.optBoolean("autosave-every-move", false)) autosave();
       Lizzie.frame.refresh();
     }
   }
