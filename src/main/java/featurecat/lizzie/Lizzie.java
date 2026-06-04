@@ -55,8 +55,8 @@ public class Lizzie {
       System.exit(1);
     }
 
-    if (mainArgs.length == 1) {
-      frame.loadFile(new File(mainArgs[0]));
+    if (mainArgs.length == 1 && frame.loadFile(new File(mainArgs[0]))) {
+      /* Pass */
     } else if (config.config.getJSONObject("ui").getBoolean("resume-previous-game")) {
       board.resumePreviousGame();
     }

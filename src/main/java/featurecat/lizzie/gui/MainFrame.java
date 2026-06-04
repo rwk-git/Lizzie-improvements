@@ -460,7 +460,8 @@ public abstract class MainFrame extends JFrame {
     if (file.length > 0) loadFile(file[0]);
   }
 
-  public void loadFile(File file) {
+  public boolean loadFile(File file) {
+    boolean success = false;
     JSONObject filesystem = Lizzie.config.persisted.getJSONObject("filesystem");
     if (!(file.getPath().endsWith(".sgf")
         || file.getPath().endsWith(".gib")
@@ -471,9 +472,9 @@ public abstract class MainFrame extends JFrame {
     try {
       System.out.println(file.getPath());
       if (file.getPath().endsWith(".sgf") || file.getPath().endsWith(".SGF")) {
-        SGFParser.load(file.getPath());
+        success = SGFParser.load(file.getPath());
       } else {
-        GIBParser.load(file.getPath());
+        success = GIBParser.load(file.getPath());
       }
       if (file.getParent() != null) {
         filesystem.put("last-folder", file.getParent());
@@ -485,6 +486,7 @@ public abstract class MainFrame extends JFrame {
           "Error",
           JOptionPane.ERROR);
     }
+    return success;
   }
 
   protected String loadingText() {
