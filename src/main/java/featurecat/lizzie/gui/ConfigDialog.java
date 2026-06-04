@@ -27,6 +27,8 @@ import java.awt.RenderingHints;
 import java.awt.TexturePaint;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
@@ -656,6 +658,45 @@ public class ConfigDialog extends LizzieDialog {
     chkPrintEngineLog = new JCheckBox("");
     chkPrintEngineLog.setBounds(167, 425, 201, 23);
     engineTab.add(chkPrintEngineLog);
+
+    // Arrays for dynamic repositioning of engine rows when the panel is resized
+    final JButton[] engineBrowseButtons = {
+      button, button_1, button_2, button_3, button_4,
+      button_5, button_6, button_7, button_8, button_9
+    };
+    final JCheckBox enginePreload0 = chkPreload;
+    final JLabel enginePreloadLbl = lblPreload;
+    final int[] engineRowY = {40, 75, 105, 135, 165, 195, 225, 255, 285, 315};
+
+    engineTab.addComponentListener(
+        new ComponentAdapter() {
+          @Override
+          public void componentResized(ComponentEvent evt) {
+            int w = engineTab.getWidth();
+            if (w < 100) return;
+            final int btnW = 40, chkW = 23, gap = 2, rightMargin = 5;
+            int btnX = w - rightMargin - btnW;
+            int chkX = btnX - gap - chkW;
+            int txtX = 87;
+            int txtW = chkX - gap - txtX;
+            if (txtW < 10) return;
+
+            enginePreloadLbl.setBounds(chkX, 14, 92, 16);
+
+            txtEngine.setBounds(txtX, engineRowY[0], txtW, 26);
+            enginePreload0.setBounds(chkX, engineRowY[0] + 1, chkW, 23);
+            engineBrowseButtons[0].setBounds(btnX, engineRowY[0], btnW, 26);
+
+            if (txts != null && chkPreloads != null) {
+              for (int i = 0; i < txts.length; i++) {
+                int y = engineRowY[i + 1];
+                txts[i].setBounds(txtX, y, txtW, 26);
+                chkPreloads[i].setBounds(chkX, y + 1, chkW, 23);
+                engineBrowseButtons[i + 1].setBounds(btnX, y, btnW, 26);
+              }
+            }
+          }
+        });
 
     uiTab = new PanelWithToolTip();
     tabbedPane.addTab(resourceBundle.getString("LizzieConfig.title.ui"), null, uiTab, null);
